@@ -38,6 +38,19 @@ app.get("/", async (req, res) => {
 
 });
 
+//add a todo
+app.post("/todo", async (req, res) => {
+  try {
+    const {task, done} = req.body
+    const query = 'INSERT INTO todos (task, done) VALUES ($1, $2) RETURNING *'
+    const result = await client.query(query, [task, done])
+    res.status(200).json(result.rows[0])
+  } catch (error) {
+    res.status(400)
+    console.error(error)
+  }
+})
+
 
 //edit a todo
 app.put("/todo/:id", async(req,res) => {
@@ -52,6 +65,8 @@ app.put("/todo/:id", async(req,res) => {
     console.error(error)
   }
 })
+
+
 
 
 //Start the server on the given port
