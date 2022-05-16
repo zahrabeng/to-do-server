@@ -26,9 +26,10 @@ app.use(cors()) //add CORS support to each following route handler
 const client = new Client(dbConfig);
 client.connect();
 
+//get all todos
 app.get("/", async (req, res) => {
   try {
-    const dbres = await client.query('select * from todos');
+    const dbres = await client.query('SELECT * FROM todos');
     res.status(200).json(dbres.rows);
   } catch (error) {
     res.status(400)
@@ -36,6 +37,21 @@ app.get("/", async (req, res) => {
   }
 
 });
+
+
+//edit a todo
+app.put("/todo/:id", async(req,res) => {
+  try {
+    const id = parseInt(req.params.id)
+    const {task, done} = req.body;
+    const query = 'UPDATE todos SET task = $1, done = $2 WHERE id = $3 RETURNING *'
+    const result = await client.query(query, [task, done, id])
+    res.status(200).json(result.rows[0])
+  } catch (error) {
+    res.status(400)
+    console.error(error)
+  }
+})
 
 
 //Start the server on the given port
