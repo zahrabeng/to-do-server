@@ -27,8 +27,14 @@ const client = new Client(dbConfig);
 client.connect();
 
 app.get("/", async (req, res) => {
-  const dbres = await client.query('select * from todos');
-  res.json(dbres.rows);
+  try {
+    const dbres = await client.query('select * from todos');
+    res.status(200).json(dbres.rows);
+  } catch (error) {
+    res.status(400)
+    console.error(error)
+  }
+
 });
 
 
