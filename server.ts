@@ -28,7 +28,7 @@ client.connect();
 
 app.get("/", async (req, res) => {
   const dbres = await client.query('select * from categories');
-  res.json(dbres.rows);
+  res.json(dbres.rows[0]);
 });
 
 
