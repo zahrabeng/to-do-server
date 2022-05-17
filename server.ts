@@ -66,7 +66,21 @@ app.put("/todo/:id", async(req,res) => {
   }
 })
 
+//delete a todo
+app.delete("/todo/:id", async(req,res) => {
+ try {
+  const id = parseInt(req.params.id)
+  const query = "DELETE FROM todos WHERE id = $1"
+  const result = await client.query(query, [id])
 
+  if (result.rowCount ===1){
+    res.status(200).json({status: "success"})
+  }
+ } catch (error) {
+  res.status(400)
+  console.error(error)
+ }
+})
 
 
 //Start the server on the given port
