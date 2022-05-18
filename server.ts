@@ -38,6 +38,20 @@ app.get("/", async (req, res) => {
 
 });
 
+//get a todo with a specific id
+app.get("/todo/:id", async (req, res)=> {
+ try {
+  const id = parseInt(req.params.id)
+  const query = "SELECT * FROM todos WHERE id = $1"
+  const result = await client.query(query, [id])
+  res.status(200).json(result.rows)
+   
+ } catch (error) {
+   res.status(400)
+   console.error(error)
+ }
+})
+
 //add a todo
 app.post("/todo", async (req, res) => {
   try {
